@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Aeropuerto.h
+iostream
+-
+vector
+-
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Arista.h
+math.h
+-
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Grafo.cpp
+Grafo.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Grafo.h
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Grafo.h
+vector
+-
+Nodo.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Nodo.h
+Arista.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Arista.h
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Nodo.h
+Arista.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Arista.h
+vector
+-
+
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/main.cpp
+iostream
+-
+Grafo.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Grafo.h
+Aeropuerto.h
+C:/Users/PROPIETARIO/Desktop/ProyectoGrafo/Aeropuerto.h
+

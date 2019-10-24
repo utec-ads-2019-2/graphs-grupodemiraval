@@ -9,11 +9,15 @@
 
 template <typename T1>
 class Nodo {
-    T1 data;
-    double posx, posy;
-    std::vector<Arista*> aristas;
 public:
-    Nodo(T1 data):data{data},posx{0},posy{0}{}
+    T1 data;
+    float posx, posy;
+    std::vector<Arista<T1>*> aristas;
+    Nodo(T1 data):data{data},posx{0},posy{0}
+    {
+        posx = data->Longitud;
+        posy = data->Latitud;
+    }
 };
 
 

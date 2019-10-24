@@ -10,15 +10,16 @@
 using namespace std;
 
 class Aeropuerto {
+public:
+
     string Ciudad;
     string Nombre;
     string Pais;
     float Longitud;
     float Latitud;
     int id;
-    vector <string> destinos;
-public:
-    Aeropuerto(string Ciudad, string Nombre, string Pais, float Longitud, float Latitud, int id, vector<string> destinos):
+    vector <int> destinos;
+    Aeropuerto(string Ciudad, string Nombre, string Pais, float Longitud, float Latitud, int id, vector<int> destinos):
     Ciudad{Ciudad},Nombre{Nombre},Pais{Pais},Longitud{Longitud},Latitud{Latitud},id{id},destinos{destinos}{}
 };
 
