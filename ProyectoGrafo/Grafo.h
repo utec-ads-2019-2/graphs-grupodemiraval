@@ -1,18 +1,10 @@
-//
-// Created by PROPIETARIO on 23/10/2019.
-//
-
 #ifndef PROYECTOGRAFO_GRAFO_H
 #define PROYECTOGRAFO_GRAFO_H
 
 #include <vector>
 #include "Nodo.h"
-#include "Arista.h"
-#include <iostream>
-#include <algorithm>
 
 using namespace std;
-
 template<typename T1>
 class Grafo {
 public:
@@ -27,6 +19,8 @@ public:
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final, int &pos);
     void Remover_Arista(int id_inicio, int id_final);
     void Remover_Nodo(int remove_id);
+
+	
 };
 
 template <typename T1>
@@ -113,8 +107,10 @@ void Grafo<T1>::Generar_Aristas()
         for(auto dest : it->data->destinos )
         {
             auto destino = Buscar_Nodo(dest);
-            auto aux = new Arista<T1>(it,destino);
-            it->aristas.push_back(aux);
+			if (destino != nullptr) {
+				auto aux = new Arista<T1>(it, destino);
+				it->aristas.push_back(aux);
+			}
         }
     }
 }
@@ -122,10 +118,10 @@ void Grafo<T1>::Generar_Aristas()
 template <typename T1>
 void Grafo<T1>::Imprimir_Grafo()
 {
-    for(auto it : this->nodos)
-    {
-        it->Imprimir_Aristas();
-    }
+	for (auto it : this->nodos)
+	{
+		it->Imprimir_Aristas();
+	}
 }
 
 template<typename T1>
@@ -159,5 +155,20 @@ void Grafo<T1>::Remover_Nodo(int remove_id) {
     }
     delete node;
 }
+
+
+class Aeropuerto {
+public:
+	string Ciudad;
+	string Nombre;
+	string Pais;
+	float Longitud;
+	float Latitud;
+	int id;
+	vector <int> destinos;
+
+	Aeropuerto(string Ciudad, string Nombre, string Pais, float Longitud, float Latitud, int id, vector<int> destinos) :
+		Ciudad{ Ciudad }, Nombre{ Nombre }, Pais{ Pais }, Longitud{ Longitud }, Latitud{ Latitud }, id{ id }, destinos{ destinos }{}
+};
 
 #endif //PROYECTOGRAFO_GRAFO_H
