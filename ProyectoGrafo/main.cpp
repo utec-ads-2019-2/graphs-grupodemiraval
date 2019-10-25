@@ -15,4 +15,10 @@ int main() {
     graph.Insertar_Nodo(new Aeropuerto("Buenos Aires","Bombo","Argentina",200,50.5,333,destinos3));
     graph.Insertar_Nodo(new Aeropuerto("Quito","Atahualpa","Ecuador",121,600,444,destinos4));
     graph.Generar_Aristas();
+    graph.Imprimir_Grafo();
+    cout<<graph.Buscar_Arista(111,444)->peso<<endl;
+    graph.Remover_Arista(111,444);
+    graph.Remover_Nodo(111);
+    graph.Imprimir_Grafo();
+
 }

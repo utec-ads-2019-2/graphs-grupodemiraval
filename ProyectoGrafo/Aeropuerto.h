@@ -11,7 +11,6 @@ using namespace std;
 
 class Aeropuerto {
 public:
-
     string Ciudad;
     string Nombre;
     string Pais;
