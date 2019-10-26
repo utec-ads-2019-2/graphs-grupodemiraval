@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <queue>
+#include <unordered_set>
 #include "Nodo.h"
 
 using namespace std;
@@ -21,7 +22,7 @@ public:
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final, int &pos);
     void Remover_Arista(int id_inicio, int id_final);
     void Remover_Nodo(int remove_id);
-
+    bool Es_Bipartito();
 	
 };
 
@@ -161,30 +162,30 @@ void Grafo<T1>::Remover_Nodo(int remove_id) {
 template<typename T1>
 bool Grafo<T1>::Es_Bipartito() {
     map<int,bool> colores;
-    unordered_set<int> sin_colorear;
+    unordered_set<Nodo<T1>*> sin_colorear;
     for(auto n : this->nodos)
-        sin_colorear.insert(n->id);
-    colores[this->nodos[0]->id] = true;
-    sin_colorear.erase(this->nodos[0]->id);
+        sin_colorear.insert(n);
+    colores[this->nodos[0]->data->id] = true;
+    sin_colorear.erase(this->nodos[0]);
     queue<Nodo<T1>*> q;
     q.push(this->nodos[0]);
     while(!q.empty()) {
         Nodo<T1>* actual = q.front();
         q.pop();
         for(auto arista : actual->aristas) {
-            Nodo<T1>* vecino = arista[1];
-            if(!colores.count(vecino->id)) {
-                colores[vecino->id] = !colores[actual->id];
-                sin_colorear.erase(this->nodos[0]->id);
+            Nodo<T1>* vecino = arista->nodos[1];
+            if(!colores.count(vecino->data->id)) {
+                colores[vecino->data->id] = !colores[actual->data->id];
+                sin_colorear.erase(this->nodos[0]->data->id);
                 q.push(vecino);
             }
-            else if(colores[vecino->id] == colores[actual->id])
+            else if(colores[vecino->data->id] == colores[actual->data->id])
                 return false;
         }
         if(q.empty() && !sin_colorear.empty()) {
-            colores[(*sin_colorear.begin())->id] = true;
-            sin_colorear.erase((*sin_colorear.begin())->id);
-            q.push((*sin_colorear.begin())->id);
+            colores[(*sin_colorear.begin())->data->id] = true;
+            sin_colorear.erase(*sin_colorear.begin());
+            q.push(*sin_colorear.begin());
         }
     }
     return true;
