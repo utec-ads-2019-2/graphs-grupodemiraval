@@ -2,6 +2,8 @@
 #define PROYECTOGRAFO_GRAFO_H
 
 #include <vector>
+#include <map>
+#include <queue>
 #include "Nodo.h"
 
 using namespace std;
@@ -156,6 +158,37 @@ void Grafo<T1>::Remover_Nodo(int remove_id) {
     delete node;
 }
 
+template<typename T1>
+bool Grafo<T1>::Es_Bipartito() {
+    map<int,bool> colores;
+    unordered_set<int> sin_colorear;
+    for(auto n : this->nodos)
+        sin_colorear.insert(n->id);
+    colores[this->nodos[0]->id] = true;
+    sin_colorear.erase(this->nodos[0]->id);
+    queue<Nodo<T1>*> q;
+    q.push(this->nodos[0]);
+    while(!q.empty()) {
+        Nodo<T1>* actual = q.front();
+        q.pop();
+        for(auto arista : actual->aristas) {
+            Nodo<T1>* vecino = arista[1];
+            if(!colores.count(vecino->id)) {
+                colores[vecino->id] = !colores[actual->id];
+                sin_colorear.erase(this->nodos[0]->id);
+                q.push(vecino);
+            }
+            else if(colores[vecino->id] == colores[actual->id])
+                return false;
+        }
+        if(q.empty() && !sin_colorear.empty()) {
+            colores[(*sin_colorear.begin())->id] = true;
+            sin_colorear.erase((*sin_colorear.begin())->id);
+            q.push((*sin_colorear.begin())->id);
+        }
+    }
+    return true;
+}
 
 class Aeropuerto {
 public:
