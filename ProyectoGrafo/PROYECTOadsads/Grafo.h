@@ -176,16 +176,17 @@ bool Grafo<T1>::Es_Bipartito() {
             Nodo<T1>* vecino = arista->nodos[1];
             if(!colores.count(vecino->data->id)) {
                 colores[vecino->data->id] = !colores[actual->data->id];
-                sin_colorear.erase(this->nodos[0]->data->id);
+                sin_colorear.erase(vecino);
                 q.push(vecino);
             }
             else if(colores[vecino->data->id] == colores[actual->data->id])
                 return false;
         }
         if(q.empty() && !sin_colorear.empty()) {
-            colores[(*sin_colorear.begin())->data->id] = true;
-            sin_colorear.erase(*sin_colorear.begin());
-            q.push(*sin_colorear.begin());
+            auto nodo = *sin_colorear.begin();
+            colores[nodo->data->id] = true;
+            sin_colorear.erase(nodo);
+            q.push(nodo);
         }
     }
     return true;
