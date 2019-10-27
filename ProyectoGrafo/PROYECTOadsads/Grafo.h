@@ -2,6 +2,9 @@
 #define PROYECTOGRAFO_GRAFO_H
 
 #include <vector>
+#include <map>
+#include <queue>
+#include <unordered_set>
 #include "Nodo.h"
 
 using namespace std;
@@ -19,7 +22,7 @@ public:
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final, int &pos);
     void Remover_Arista(int id_inicio, int id_final);
     void Remover_Nodo(int remove_id);
-
+    bool Es_Bipartito();
 	
 };
 
@@ -156,6 +159,38 @@ void Grafo<T1>::Remover_Nodo(int remove_id) {
     delete node;
 }
 
+template<typename T1>
+bool Grafo<T1>::Es_Bipartito() {
+    map<int,bool> colores;
+    unordered_set<Nodo<T1>*> sin_colorear;
+    for(auto n : this->nodos)
+        sin_colorear.insert(n);
+    colores[this->nodos[0]->data->id] = true;
+    sin_colorear.erase(this->nodos[0]);
+    queue<Nodo<T1>*> q;
+    q.push(this->nodos[0]);
+    while(!q.empty()) {
+        Nodo<T1>* actual = q.front();
+        q.pop();
+        for(auto arista : actual->aristas) {
+            Nodo<T1>* vecino = arista->nodos[1];
+            if(!colores.count(vecino->data->id)) {
+                colores[vecino->data->id] = !colores[actual->data->id];
+                sin_colorear.erase(vecino);
+                q.push(vecino);
+            }
+            else if(colores[vecino->data->id] == colores[actual->data->id])
+                return false;
+        }
+        if(q.empty() && !sin_colorear.empty()) {
+            auto nodo = *sin_colorear.begin();
+            colores[nodo->data->id] = true;
+            sin_colorear.erase(nodo);
+            q.push(nodo);
+        }
+    }
+    return true;
+}
 
 class Aeropuerto {
 public:
