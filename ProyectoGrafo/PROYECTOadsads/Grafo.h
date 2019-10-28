@@ -241,16 +241,29 @@ void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<Nodo<T1>*>& visited) {
 template<typename T1>
 bool Grafo<T1>::Es_Conexo() {
     Nodo<T1>* actual = this->nodos[0];
-    cout << "antes del dfs " << actual << endl;
     unordered_set<Nodo<T1>*> vis1,vis2;
     this->DFS(actual,vis1);
-    cout << "despues de dfs " << actual << endl;
     Grafo<T1> invertido = this->Invertir_Aristas();
     invertido.DFS(actual, vis2);
     for(auto nodo : this->nodos) {
         if(!vis1.count(nodo) && !vis2.count(nodo))
             return false;
     }
+    return true;
+}
+
+template<typename T1>
+bool Grafo<T1>::Es_Fuertemente_Conexo() {
+    Nodo<T1>* inicio = this->nodos[0];
+    unordered_set<Nodo<T1>*>vis1,vis2;
+    this->DFS(inicio,vis1);
+    if(this->nodos.size() != vis1.size())
+        return false;
+    Grafo<T1> invertido = this->Invertir_Aristas();
+    inicio = this->nodos[0];
+    invertido.DFS(actual, vis2);
+    if(this->nodos.size() != vis2.size())
+        return false;
     return true;
 }
 
