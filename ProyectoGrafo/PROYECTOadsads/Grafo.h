@@ -14,7 +14,6 @@ public:
     vector<Nodo<T1>*> nodos;
     Grafo()=default;
     void Insertar_Nodo(T1 data);
-    void Insertar_Nodo(Nodo<T1>* nodo);
     void Generar_Aristas();
     void Imprimir_Grafo();
     Nodo<T1>* Buscar_Nodo(int search_id);
@@ -25,9 +24,10 @@ public:
     void Remover_Nodo(int remove_id);
     bool Es_Bipartito();
 	bool Es_Conexo();
-    void DFS(Nodo<T1>*& v, unordered_set<Nodo<T1>*>& visited);
+    void DFS(Nodo<T1>*& v, unordered_set<int>& visited);
     void Generar_Aristas_Invertidas();
     Grafo<T1> Invertir_Aristas();
+    bool Es_Fuertemente_Conexo();
 };
 
 template <typename T1>
@@ -35,11 +35,6 @@ void Grafo<T1>::Insertar_Nodo(T1 data)
 {
     auto temp = new Nodo<T1>(data);
     this->nodos.push_back(temp);
-}
-
-template<typename T1>
-void Grafo<T1>::Insertar_Nodo(Nodo<T1>* nodo) {
-    this->nodos.push_back(nodo);
 }
 
 template <typename T1>
@@ -220,18 +215,17 @@ bool Grafo<T1>::Es_Bipartito() {
 template<typename T1>
 Grafo<T1> Grafo<T1>::Invertir_Aristas() {
     Grafo<T1> graph;
-    for(auto nodo : this->nodos) {
-        graph.Insertar_Nodo(nodo);
-        graph.Generar_Aristas_Invertidas();
-    }
+    for(auto nodo : this->nodos)
+        graph.Insertar_Nodo(nodo->data);
+    graph.Generar_Aristas_Invertidas();
     return graph;
 }
 
 template<typename T1>
-void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<Nodo<T1>*>& visited) {
-    visited.insert(v);
+void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<int>& visited) {
+    visited.insert(v->data->id);
     for(auto arista : v->aristas) {
-        if(!visited.count(arista->nodos[1])) {
+        if(!visited.count(arista->nodos[1]->data->id)) {
             v = arista->nodos[1];
             DFS(v, visited);
         }
@@ -241,12 +235,13 @@ void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<Nodo<T1>*>& visited) {
 template<typename T1>
 bool Grafo<T1>::Es_Conexo() {
     Nodo<T1>* actual = this->nodos[0];
-    unordered_set<Nodo<T1>*> vis1,vis2;
+    unordered_set<int> vis1,vis2;
     this->DFS(actual,vis1);
     Grafo<T1> invertido = this->Invertir_Aristas();
+    actual = invertido.Buscar_Nodo(actual->data->id);
     invertido.DFS(actual, vis2);
     for(auto nodo : this->nodos) {
-        if(!vis1.count(nodo) && !vis2.count(nodo))
+        if(!vis1.count(nodo->data->id) && !vis2.count(nodo->data->id))
             return false;
     }
     return true;
@@ -255,14 +250,14 @@ bool Grafo<T1>::Es_Conexo() {
 template<typename T1>
 bool Grafo<T1>::Es_Fuertemente_Conexo() {
     Nodo<T1>* inicio = this->nodos[0];
-    unordered_set<Nodo<T1>*>vis1,vis2;
+    unordered_set<int>vis1,vis2;
     this->DFS(inicio,vis1);
     if(this->nodos.size() != vis1.size())
         return false;
     Grafo<T1> invertido = this->Invertir_Aristas();
-    inicio = this->nodos[0];
-    invertido.DFS(actual, vis2);
-    if(this->nodos.size() != vis2.size())
+    inicio = invertido.Buscar_Nodo(this->nodos[0]->data->id);
+    invertido.DFS(inicio, vis2);
+    if(invertido.nodos.size() != vis2.size())
         return false;
     return true;
 }

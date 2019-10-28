@@ -7,7 +7,7 @@
 
 int main()
 {
-	/*
+	
 	Json::Value aeropuertos;
 	ifstream aeropuertos_file("airports.json", ios::in);
 	aeropuertos_file >> aeropuertos;
@@ -29,7 +29,7 @@ int main()
 		
 		destinos.clear();
 	}
-	*/
+	/*
 
 	Grafo<Aeropuerto*> graph;
 	vector<int> destinos1 = {2,4};
@@ -43,7 +43,7 @@ int main()
 	graph.Insertar_Nodo(new Aeropuerto("City", "Name", "Country", 1.4, 1.0, 5, destinos3));
 	graph.Insertar_Nodo(new Aeropuerto("City", "Name", "Country", 1.5, 1.0, 6, destinos4));
 	graph.Insertar_Nodo(new Aeropuerto("City", "Name", "Country", 1.6, 1.0, 7, destinos4));
-	
+	*/
 	graph.Generar_Aristas();
 
 	graph.Imprimir_Grafo();
@@ -53,6 +53,8 @@ int main()
 	cout << (graph.Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 
 	cout << (graph.Es_Conexo() ? "es conexo" : "no es conexo") << endl;
+
+	cout << (graph.Es_Fuertemente_Conexo() ? "es fuertemente conexo" : "no es fuertemente conexo") << endl;
 
 	return EXIT_SUCCESS;
 
