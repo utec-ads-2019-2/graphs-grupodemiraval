@@ -39,7 +39,7 @@ int main()
 	cout << "\n\n\n\n";
 
 	for (auto it : min_prim) {
-		cout << it->nodos[0]->data->Nombre<<"  "<< it->nodos[1]->data->Nombre << endl;
+		cout << it->nodos[0]->data->id<<"  "<< it->nodos[1]->data->id << endl;
 	}
 
 	return EXIT_SUCCESS;
