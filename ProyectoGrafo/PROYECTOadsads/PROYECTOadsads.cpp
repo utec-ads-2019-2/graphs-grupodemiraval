@@ -88,6 +88,15 @@ int main()
 			cout << "\n\n";
 			counter++;
 		}
+		cout << "Ejecutando el MST : KRUSKAL : " << endl;
+
+		auto a = graph.MST_Kruskal();
+		for (auto i : a.nodos)
+		{
+			i->Imprimir_Aristas();
+		}
+
+
 	}
 
 	

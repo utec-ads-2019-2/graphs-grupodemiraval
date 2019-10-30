@@ -33,6 +33,7 @@ public:
 
 template<typename T1>
 class Grafo_dirigido : public Grafo {
+public:
 	void Generar_Aristas() override {
 		for (auto it : this->nodos)
 		{
@@ -50,6 +51,8 @@ class Grafo_dirigido : public Grafo {
 
 template<typename T1>
 class Grafo_no_dirigido : public Grafo {
+
+public:
 	void Generar_Aristas() override {
 		for (auto it : this->nodos)
 		{
@@ -66,14 +69,31 @@ class Grafo_no_dirigido : public Grafo {
 			}
 		}
 	}
+
 	vector<Arista<T1>*> Prim();
+	Grafo<T1> MST_Kruskal();
 };
+
+template<typename T1>
+bool menor(Arista<T1>* a, Arista<T1>* b)
+{
+	return a->peso < b->peso;
+}
 
 template <typename T1>
 void Grafo<T1>::Insertar_Nodo(T1 data)
 {
     auto temp = new Nodo<T1>(data);
     this->nodos.push_back(temp);
+}
+
+int Buscar_Padre(int id_nodo, map<int, int> padres)
+{
+	if (padres[id_nodo] == id_nodo)
+	{
+		return id_nodo;
+	}
+	return Buscar_Padre(padres[id_nodo], padres);
 }
 
 template <typename T1>
@@ -351,6 +371,57 @@ vector<Arista<T1>*> Grafo_no_dirigido<T1>::Prim()
 		}
 	}
 	return *vectorcito;
+}
+
+template<typename T1>
+Grafo<T1> Grafo_no_dirigido<T1>::MST_Kruskal()
+{
+	vector<Arista<T1>*> Krusk = {};
+	vector<Arista<T1>*> Aristas_Ordenadas;
+	map<int, int> padres;
+	for (auto node : this->nodos)
+	{
+		padres[node->data->id] = node->data->id;
+		for (auto ar : node->aristas)
+		{
+			Aristas_Ordenadas.push_back(ar);
+		}
+	}
+
+	sort(Aristas_Ordenadas.begin(), Aristas_Ordenadas.end(), menor<T1>);
+	int i = 0;
+	while (Krusk.size() < this->nodos.size() - 1)
+	{
+		Arista<T1>* actual = Aristas_Ordenadas[i];
+		int padre_inicio = Buscar_Padre(actual->nodos[0]->data->id, padres);
+		int padre_final = Buscar_Padre(actual->nodos[1]->data->id, padres);
+		if (padre_inicio != padre_final)
+		{
+			Krusk.push_back(actual);
+			padres[padre_inicio] = padre_final;
+		}
+		i++;
+	}
+	Grafo<T1> MST_graph;
+	for (auto cc : Krusk)
+	{
+		cc->nodos[0]->aristas.clear();
+		cc->nodos[1]->aristas.clear();
+	}
+	for (auto it : Krusk)
+	{
+		if (MST_graph.Buscar_Nodo(it->nodos[0]->data->id) == nullptr)
+		{
+			MST_graph.nodos.push_back(it->nodos[0]);
+		}
+		if (MST_graph.Buscar_Nodo(it->nodos[1]->data->id) == nullptr)
+		{
+			MST_graph.nodos.push_back(it->nodos[1]);
+		}
+		it->nodos[0]->aristas.push_back(it);
+		it->nodos[1]->aristas.push_back(it);
+	}
+	return MST_graph;
 }
 
 template<typename T1>
