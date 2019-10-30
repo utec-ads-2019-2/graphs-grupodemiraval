@@ -31,6 +31,7 @@ vector<Arista<T1>*> Grafo<T1>::Prim()
 {
 	vector<Arista<T1>*>  *vectorcito = new vector<Arista<T1>*>;
 	vector<Nodo<T1>*>  *vectorcito_nodos = new vector<Nodo<T1>*>;
+
 	auto nodo_temp = nodos.front();
 	vectorcito_nodos->push_back(nodo_temp);
 	auto arista_temp = menor_Arista(vectorcito_nodos);
@@ -125,12 +126,14 @@ template<typename T1>
 Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*> *vectorcito)
 {
 	float menor = 1000000.0;
+
 	auto menor_arista = vectorcito->front()->aristas.front();
 	for (auto it : *vectorcito) {
 		for (auto thi : it->aristas) {
 			if (thi->peso < menor){
 				if (!(is_in_vector(vectorcito, thi->nodos[0]) && is_in_vector(vectorcito, thi->nodos[1]))) {
 					menor_arista = thi;
+					menor = menor_arista->peso;
 				}
 			}
 		}
@@ -197,8 +200,9 @@ void Grafo<T1>::Generar_Aristas_noDirec()
 			if (destino != nullptr) {
 				auto aux = new Arista<T1>(it, destino);
 				it->aristas.push_back(aux);
-				//destino->aristas.push_back(aux);
-				destino->insertar(aux);
+				if (!destino->seRepite(aux)) {
+					destino->aristas.push_back(aux);
+				}
 			}
 		}
 	}

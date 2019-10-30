@@ -1,4 +1,5 @@
 ﻿  PROYECTOadsads.cpp
 C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(18,20): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(19,21): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\Nodo.h(55): warning C4715: 'Nodo<Aeropuerto *>::seRepite': no todas las rutas de acceso de control devuelven un valor
   PROYECTOadsads.vcxproj -> C:\Users\HP\source\repos\PROYECTOadsads\Debug\PROYECTOadsads.exe

@@ -37,20 +37,20 @@ public:
 	}
 
 
-	void insertar(Arista<T1>* arista) {
+	bool seRepite(Arista<T1>* arista) {
 		if (!aristas.empty()) {
-			for (auto in = aristas.begin(); in != aristas.end(); ++in) {
-				if (arista->nodos[0] == (*in)->nodos[1] && arista->nodos[1] == (*in)->nodos[0]) {
-
-				}
+			for (auto it : aristas) {
+				if (it->nodos[0] == arista->nodos[0] && it->nodos[1] == arista->nodos[1]) { return true; }
 				else {
-					aristas.push_back(arista);
+					return false;
 				}
 			}
 		}
 		else {
-			aristas.push_back(arista);
+			return false;
 		}
+			
+		
 		
 	}
 };
