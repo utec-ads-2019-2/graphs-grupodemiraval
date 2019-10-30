@@ -1,0 +1,128 @@
+[
+  {
+    "City": "Postville",
+    "Name": "Postville Airport",
+    "Country": "Canada",
+    "Longitude": "-59.785278",
+    "Latitude": "54.910278",
+    "Id": "7252",
+    "destinations": [
+      "5492",
+      "6972",
+      "5502"
+    ]
+  },
+  {
+    "City": "Osubi",
+    "Name": "Warri Airport",
+    "Country": "Nigeria",
+    "Longitude": "5.45",
+    "Latitude": "5.31",
+    "Id": "6972",
+    "destinations": [
+      "7252",
+      "4026",
+      "4027",
+      "4024",
+      "4025",
+      "4022",
+      "4023"
+    ]
+  },
+  {
+    "City": "Rockland",
+    "Name": "Knox County Regional Airport",
+    "Country": "United States",
+    "Longitude": "-69.0992303",
+    "Latitude": "44.0601111",
+    "Id": "4026",
+    "destinations": [
+      "7252",
+      "6972",
+      "4027",
+      "4024",
+      "4025",
+      "4022",
+      "4023"
+    ]
+  },
+  {
+    "City": "Jacksn Hole",
+    "Name": "Jackson Hole Airport",
+    "Country": "United States",
+    "Longitude": "-110.73775",
+    "Latitude": "43.607333333",
+    "Id": "4027",
+    "destinations": [
+      "7252",
+      "6972",
+      "4026",
+      "4025",
+      "4022",
+      "4023"
+    ]
+  },
+  {
+    "City": "Flores",
+    "Name": "Mundo Maya International",
+    "Country": "Guatemala",
+    "Longitude": "-89.866383",
+    "Latitude": "16.913819",
+    "Id": "4024",
+    "destinations": [
+      "7252",
+      "6972",
+      "4026",
+      "4027",
+      "4025",
+      "4022",
+      "4023"
+    ]
+  },
+  {
+    "City": "Bar Harbor",
+    "Name": "Hancock County - Bar Harbor",
+    "Country": "United States",
+    "Longitude": "-68.3615653",
+    "Latitude": "44.4497689",
+    "Id": "4025",
+    "destinations": [
+      "7252",
+      "6972",
+      "4026",
+      "4027",
+      "4024",
+      "4022",
+      "4023"
+    ]
+  },
+  {
+    "City": "Butte",
+    "Name": "Bert Mooney Airport",
+    "Country": "United States",
+    "Longitude": "-112.497472",
+    "Latitude": "45.954806",
+    "Id": "4022",
+    "destinations": [
+      "7252",
+      "6972",
+      "4025",
+      "4023"
+
+    ]
+  },
+  {
+    "City": "Traverse City",
+    "Name": "Cherry Capital Airport",
+    "Country": "United States",
+    "Longitude": "-85.582235",
+    "Latitude": "44.741445",
+    "Id": "4023",
+    "destinations": [
+      "7252",
+      "6972",
+      "4026",
+      "4027"
+    ]
+  }
+]
