@@ -14,7 +14,7 @@ public:
     vector<Nodo<T1>*> nodos;
     Grafo()=default;
     void Insertar_Nodo(T1 data);
-    void Generar_Aristas();
+    virtual void Generar_Aristas() = 0;
     void Imprimir_Grafo();
     Nodo<T1>* Buscar_Nodo(int search_id);
     Nodo<T1>* Buscar_Nodo(int search_id, int &pos);
@@ -28,6 +28,45 @@ public:
     void Generar_Aristas_Invertidas();
     Grafo<T1> Invertir_Aristas();
     bool Es_Fuertemente_Conexo();
+	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
+};
+
+template<typename T1>
+class Grafo_dirigido : public Grafo {
+	void Generar_Aristas() override {
+		for (auto it : this->nodos)
+		{
+			for (auto dest : it->data->destinos)
+			{
+				auto destino = Buscar_Nodo(dest);
+				if (destino != nullptr) {
+					auto aux = new Arista<T1>(it, destino);
+					it->aristas.push_back(aux);
+				}
+			}
+		}
+	}
+};
+
+template<typename T1>
+class Grafo_no_dirigido : public Grafo {
+	void Generar_Aristas() override {
+		for (auto it : this->nodos)
+		{
+			for (auto dest : it->data->destinos)
+			{
+				auto destino = Buscar_Nodo(dest);
+				if (destino != nullptr) {
+					auto aux = new Arista<T1>(it, destino);
+					it->aristas.push_back(aux);
+					if (!destino->seRepite(aux)) {
+						destino->aristas.push_back(aux);
+					}
+				}
+			}
+		}
+	}
+	vector<Arista<T1>*> Prim();
 };
 
 template <typename T1>
@@ -120,6 +159,24 @@ void Grafo<T1>::Generar_Aristas()
 			}
         }
     }
+}
+
+void Grafo<T1>::Generar_Aristas_noDirec()
+{
+	for (auto it : this->nodos)
+	{
+		for (auto dest : it->data->destinos)
+		{
+			auto destino = Buscar_Nodo(dest);
+			if (destino != nullptr) {
+				auto aux = new Arista<T1>(it, destino);
+				it->aristas.push_back(aux);
+				if (!destino->seRepite(aux)) {
+					destino->aristas.push_back(aux);
+				}
+			}
+		}
+	}
 }
 
 template <typename T1>
@@ -261,6 +318,61 @@ bool Grafo<T1>::Es_Fuertemente_Conexo() {
         return false;
     return true;
 }
+
+template<typename T1>
+vector<Arista<T1>*> Grafo_no_dirigido<T1>::Prim()
+{	vector<Arista<T1>*>* vectorcito = new vector<Arista<T1>*>;
+	vector<Nodo<T1>*>* vectorcito_nodos = new vector<Nodo<T1>*>;
+
+	auto nodo_temp = nodos.front();
+	vectorcito_nodos->push_back(nodo_temp);
+	auto arista_temp = menor_Arista(vectorcito_nodos);
+	vectorcito->push_back(arista_temp);
+	vectorcito_nodos->clear();
+	vectorcito_nodos->push_back(arista_temp->nodos[0]);
+	vectorcito_nodos->push_back(arista_temp->nodos[1]);
+
+	cout << "\n\n\n";
+
+	int contador = 1;
+
+	while (vectorcito->size() != (nodos.size() - 1)) {
+		arista_temp = menor_Arista(vectorcito_nodos);
+		vectorcito->push_back(arista_temp);
+		cout << contador << endl;
+		cout << arista_temp->nodos[0]->data->id << "       " << arista_temp->nodos[1]->data->id << endl;
+		contador++;
+
+		if (!is_in_vector(vectorcito_nodos, arista_temp->nodos[0])) {
+			vectorcito_nodos->push_back(arista_temp->nodos[0]);
+		}
+		else if (!is_in_vector(vectorcito_nodos, arista_temp->nodos[1])) {
+			vectorcito_nodos->push_back(arista_temp->nodos[1]);
+		}
+	}
+	return *vectorcito;
+}
+
+template<typename T1>
+Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*>* vectorcito)
+{
+	float menor = 1000000.0;
+
+	auto menor_arista = vectorcito->front()->aristas.front();
+	for (auto it : *vectorcito) {
+		for (auto thi : it->aristas) {
+			if (thi->peso < menor) {
+				if (!(is_in_vector(vectorcito, thi->nodos[0]) && is_in_vector(vectorcito, thi->nodos[1]))) {
+					menor_arista = thi;
+					menor = menor_arista->peso;
+				}
+			}
+		}
+	}
+	return menor_arista;
+}
+
+
 
 class Aeropuerto {
 public:
