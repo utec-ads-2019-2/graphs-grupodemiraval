@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include "Nodo.h"
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 template<typename T1>
@@ -41,6 +42,7 @@ public:
     bool Es_Fuertemente_Conexo();
     int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
+  pair<map<Nodo<T1>*,map<Nodo<T1>*,float> >,map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> > > FloydWarshall();
 };
 
 
@@ -527,6 +529,40 @@ Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*>* vectorcito)
 	return menor_arista;
 }
 
+template<typename T1>
+pair<map<Nodo<T1>*,map<Nodo<T1>*,float> >,map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> > > Grafo<T1>::FloydWarshall() {
+  map<Nodo<T1>*,map<Nodo<T1>*,float> > dist;
+  map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> interm;
+  float inf = numeric_limits<float>::max();
+
+  for(auto n1 : this->nodos) {
+    for(auto n2 : this->nodos) {
+      dist[n1][n2] = n1 == n2 ? 0 : inf;
+      interm[n1][n2] = n2;
+    }
+  }
+
+  for(auto n : this->nodos) {
+    for(auto e : n->aristas) {
+      Nodo<T1>* n2= e->nodos[1];
+      dist[n][n2] = e->getWeight();
+      interm[n][n2] = n2;
+    }
+  }
+
+  for(auto k : this->nodos) {
+    for(auto i : this->nodos) {
+      for(auto j : this->nodos) {
+        if(dist[i][k] < inf && dist[i][j] < inf && dist[i][k] + dist[k][j] < dist[i][j]) {
+          dist[i][j] = dist[i][k] + dist[k][j];
+          interm[i][j] = k;
+        }
+      }
+    }
+  }
+
+  return make_pair(dist,interm);
+}
 
 class Aeropuerto {
 public:

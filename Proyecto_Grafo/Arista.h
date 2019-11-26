@@ -17,6 +17,9 @@ public:
 		nodos[1] = final;
 		peso = sqrt(pow(inicio->posx - final->posx, 2) + pow(inicio->posy - final->posy, 2));
 	}
+	float getWeight() {
+		return peso;
+	}
 };
 
 
