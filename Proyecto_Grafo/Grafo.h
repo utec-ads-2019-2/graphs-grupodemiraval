@@ -33,7 +33,7 @@ public:
     virtual void Generar_Aristas() = 0;
     virtual void Ejecutar() = 0;
     void Imprimir_Grafo();
-    void Insertar_Arista(int,int,float);
+    void Insertar_Arista(int,int);
     Nodo<T1>* Buscar_Nodo(int search_id);
     Nodo<T1>* Buscar_Nodo(int search_id, int &pos);
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final);
@@ -42,7 +42,7 @@ public:
     virtual void Remover_Arista(int id_inicio, int id_final) = 0;
     void Remover_Nodo(int remove_id);
     bool Es_Bipartito();
-    Grafo<T1>* construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres);
+    Grafo<T1>* construirGrafo(int inicio, int fin, unordered_map<int, int> padres);
     virtual double Densidad(double cota) = 0;
 	bool Es_Conexo();
     void DFS(Nodo<T1>*& v, unordered_set<int>& visited);
@@ -729,24 +729,23 @@ Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*>* vectorcito)
 }
 
 template<typename T1>
-void Grafo<T1>::Insertar_Arista(int inicio, int fin, float peso) {
+void Grafo<T1>::Insertar_Arista(int inicio, int fin) {
   auto it = this->Buscar_Nodo(inicio);
 	auto destino = this->Buscar_Nodo(fin);
 	auto aux = new Arista<T1>(it, destino);
 	it->aristas.push_back(aux);
-  aux->aristas.push_back(it);
 }
 
 template<typename T1>
-Grafo<T1>* Grafo<T1>::construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres) {
+Grafo<T1>* Grafo<T1>::construirGrafo(int inicio, int fin, unordered_map<int, int> padres) {
   if(padres.find(fin) == padres.end()) return nullptr;
   Grafo<T1>* res = new Grafo_dirigido<T1>();
   res->Insertar_Nodo(Buscar_Nodo(fin)->getData());
   do {
-    res->Insertar_Nodo(Buscar_Nodo(padres[fin].first)->data);
-    res->Insertar_Arista(padres[fin].first, fin, padres[fin].second);
-    fin = padres[fin].first;
-  } while(padres[fin].first != fin);
+    res->Insertar_Nodo(Buscar_Nodo(padres[fin])->data);
+    res->Insertar_Arista(padres[fin], fin);
+    fin = padres[fin];
+  } while(padres[fin] != fin);
   return res;
 }
 
@@ -756,8 +755,8 @@ unordered_map<int, Grafo<T1>* > Grafo<T1>::BellmanFord(int inicio) {
     unordered_map<Nodo<T1>*, int> nodos_invertidos;
     float inf = numeric_limits<float>::max();
     vector<Arista<T1>*> aristas;
-    unordered_map<int, pair<int, float> > padres;
-    padres[inicio] = make_pair(inicio, 0);
+    unordered_map<int, int> padres;
+    padres[inicio] = inicio;
 
     for(auto n : this->nodos) {
         dist[n->data->id] = inf;
@@ -777,7 +776,7 @@ unordered_map<int, Grafo<T1>* > Grafo<T1>::BellmanFord(int inicio) {
             float peso = ar->getWeight();
             if(dist[u] != inf && dist[u] + peso < dist[v]) {
                 dist[v] = dist[u] + peso;
-                padres[v] = make_pair(u, peso);
+                padres[v] = u;
             }
         }
     }
