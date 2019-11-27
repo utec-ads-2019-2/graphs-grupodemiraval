@@ -734,6 +734,7 @@ void Grafo<T1>::Insertar_Arista(int inicio, int fin, float peso) {
 	auto destino = this->Buscar_Nodo(fin);
 	auto aux = new Arista<T1>(it, destino);
 	it->aristas.push_back(aux);
+  aux->aristas.push_back(it);
 }
 
 template<typename T1>

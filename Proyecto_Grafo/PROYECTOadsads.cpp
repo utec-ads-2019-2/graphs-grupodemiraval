@@ -45,9 +45,13 @@ int main()
 
 	cout <<"El grafo tiene: "<<graph->nodos.size()<<" nodos"<<endl;
 
-	graph->Busqueda_A(7188,4025);
-	graph->BellmanFord(1285);
 	graph->Dijktra(7252);
+	auto x = graph->BellmanFord(1285);
+	//graph->Busqueda_A(7188,4025);
+	for(auto i : x) {
+		cout << "cammmmmino a  " << i.first << endl;
+		i.second->Imprimir_Grafo();
+	}
 
 /*	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 
