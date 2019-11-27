@@ -16,12 +16,21 @@ public:
 		posy = data->Latitud;
 	}
 
+	Arista<T1>* isAdyacent(Nodo<T1>* nodo) {
+		for (auto c : aristas) {
+			if (c->nodos[0]->data->id == nodo->data->id || c->nodos[1]->data->id == nodo->data->id) {
+				return c;
+			}
+		}
+		return nullptr;
+	};
+
 	void Imprimir_Aristas()
 	{
 		std::cout << "Aristas del nodo: " << this->data->id << "\n";
 		for (auto it : this->aristas)
 		{
-			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << " / Peso: "<<it->peso<< "\n";
+			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << "\n";
 		}
 	}
 
@@ -34,17 +43,7 @@ public:
 				}
 			}
 		}
-		else {
-			return false;
-		}
-	}
-
-	T1 getData() {
-		return data;
-	}
-
-	vector<Arista<T1>*> getEdges() {
-		return aristas;
+		return false;
 	}
 };
 
