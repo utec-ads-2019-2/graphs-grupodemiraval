@@ -9,8 +9,10 @@
 #include <math.h>
 #include <algorithm>
 #include <limits>
+#include <unordered_map>
 
 using namespace std;
+
 
 map<int,vector<double>> valores;
 
@@ -31,6 +33,7 @@ public:
     virtual void Generar_Aristas() = 0;
     virtual void Ejecutar() = 0;
     void Imprimir_Grafo();
+    void Insertar_Arista(int,int,float);
     Nodo<T1>* Buscar_Nodo(int search_id);
     Nodo<T1>* Buscar_Nodo(int search_id, int &pos);
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final);
@@ -39,6 +42,7 @@ public:
     virtual void Remover_Arista(int id_inicio, int id_final) = 0;
     void Remover_Nodo(int remove_id);
     bool Es_Bipartito();
+    Grafo<T1>* construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres);
     virtual double Densidad(double cota) = 0;
 	bool Es_Conexo();
     void DFS(Nodo<T1>*& v, unordered_set<int>& visited);
@@ -47,11 +51,11 @@ public:
     Grafo<T1>* Invertir_Aristas();
     bool Es_Fuertemente_Conexo();
     void Busqueda_A(int id_inicio, int id_final);
-    void BellmanFord(int id);
+  //  void BellmanFord(int id);
     int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
   pair<map<Nodo<T1>*,map<Nodo<T1>*,float> >,map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> > > FloydWarshall();
-  unordered_map<int, Graph<T1>* > BellmanFord(int inicio);
+  unordered_map<int, Grafo<T1>* > BellmanFord(int inicio);
 };
 
 
@@ -410,7 +414,7 @@ void Grafo<T1>::Dijktra(int search_id) {
 				if (!isInVectorIndice(posYaVisitados, k)) {
 					auto arista = nodito->isAdyacent(nodos[k]);
 					Buscar_Nodo(nodito->data->id, posicion);
-					if (arista != nullptr && MatrizSoluciones[k][0]) {						
+					if (arista != nullptr && MatrizSoluciones[k][0]) {
 						if ((arista->peso + MatrizSoluciones[posicion][0]) < MatrizSoluciones[k][0]) {
 							MatrizSoluciones[k][0] = arista->peso + MatrizSoluciones[posicion][0];
 							MatrizSoluciones[k][1] = float(posicion);
@@ -563,43 +567,43 @@ void Grafo<T1>::Busqueda_A(int id_inicio, int id_final)
   valores.clear();
 }
 
-template<typename T1>
-void Grafo<T1>::BellmanFord(int id)
-{
-  vector<Arista<T1>*> aristas;
-  map<Nodo<T1>*,double> values;
-  bool cambiado = true;
-  for (auto node : this->nodos)
-  {
-    values[node] = 10000000;
-    for (auto ar : node->aristas)
-    {
-      aristas.push_back(ar);
-    }
-  }
-  values[Buscar_Nodo(id)]=0;
-  int i = 0;
-  while(cambiado)
-  {
-    cambiado = false;
-    for(auto aris : aristas)
-    {
-      if(values[aris->nodos[0]] + aris->peso < values[aris->nodos[1]])
-      {
-        values[aris->nodos[1]] = values[aris->nodos[0]] + aris->peso;
-        cambiado = true;
-      }
-    }
-    i++;
-    if(i >= this->nodos.size())
-      throw runtime_error("No se puede hacer el Bellman-Ford porque existe un ciclo negativo");
-  }
-  cout<<"El peso minimo para llegar a cada uno de los nodos es: "<<endl;
-  for(auto n : this->nodos)
-  {
-    cout<<n->data->id<<" - "<<values[n]<<endl;
-  }
-}
+// template<typename T1>
+// void Grafo<T1>::BellmanFord(int id)
+// {
+//   vector<Arista<T1>*> aristas;
+//   map<Nodo<T1>*,double> values;
+//   bool cambiado = true;
+//   for (auto node : this->nodos)
+//   {
+//     values[node] = 10000000;
+//     for (auto ar : node->aristas)
+//     {
+//       aristas.push_back(ar);
+//     }
+//   }
+//   values[Buscar_Nodo(id)]=0;
+//   int i = 0;
+//   while(cambiado)
+//   {
+//     cambiado = false;
+//     for(auto aris : aristas)
+//     {
+//       if(values[aris->nodos[0]] + aris->peso < values[aris->nodos[1]])
+//       {
+//         values[aris->nodos[1]] = values[aris->nodos[0]] + aris->peso;
+//         cambiado = true;
+//       }
+//     }
+//     i++;
+//     if(i >= this->nodos.size())
+//       throw runtime_error("No se puede hacer el Bellman-Ford porque existe un ciclo negativo");
+//   }
+//   cout<<"El peso minimo para llegar a cada uno de los nodos es: "<<endl;
+//   for(auto n : this->nodos)
+//   {
+//     cout<<n->data->id<<" - "<<values[n]<<endl;
+//   }
+// }
 
 
 template<typename T1>
@@ -725,30 +729,30 @@ Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*>* vectorcito)
 }
 
 template<typename T1>
-void Grafo_dirigido<T1>::Insertar_Arista(int inicio, int fin, float peso) {
+void Grafo<T1>::Insertar_Arista(int inicio, int fin, float peso) {
   auto it = this->Buscar_Nodo(inicio);
-	auto destino = this->Buscar_Nodo(dest);
+	auto destino = this->Buscar_Nodo(fin);
 	auto aux = new Arista<T1>(it, destino);
 	it->aristas.push_back(aux);
 }
 
 template<typename T1>
-Graph<T1>* Graph<T1>::construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres) {
-  if(parents.find(fin) == parents.end()) return nullptr;
-  Graph<T1>* res = new Grafo_dirigido<T1>();
+Grafo<T1>* Grafo<T1>::construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres) {
+  if(padres.find(fin) == padres.end()) return nullptr;
+  Grafo<T1>* res = new Grafo_dirigido<T1>();
   res->Insertar_Nodo(Buscar_Nodo(fin)->getData());
   do {
-    res->Insertar_Nodo(Buscar_Nodo(padres[fin].first));
+    res->Insertar_Nodo(Buscar_Nodo(padres[fin].first)->data);
     res->Insertar_Arista(padres[fin].first, fin, padres[fin].second);
     fin = padres[fin].first;
-  } while(padres[fin]->first != end);
+  } while(padres[fin].first != fin);
   return res;
 }
 
 template<typename T1>
-unordered_map<int, Graph<T1>* > Graph<T1>::BellmanFord(int inicio) {
+unordered_map<int, Grafo<T1>* > Grafo<T1>::BellmanFord(int inicio) {
     unordered_map<int, float> dist;
-    unordered_map<Node<T1>*, int> nodos_invertidos;
+    unordered_map<Nodo<T1>*, int> nodos_invertidos;
     float inf = numeric_limits<float>::max();
     vector<Arista<T1>*> aristas;
     unordered_map<int, pair<int, float> > padres;
@@ -769,7 +773,7 @@ unordered_map<int, Graph<T1>* > Graph<T1>::BellmanFord(int inicio) {
         for(Arista<T1>* ar : aristas) {
             int u = nodos_invertidos[ar->nodos[0]];
             int v = nodos_invertidos[ar->nodos[1]];
-            float weight = ar->getWeight();
+            float peso = ar->getWeight();
             if(dist[u] != inf && dist[u] + peso < dist[v]) {
                 dist[v] = dist[u] + peso;
                 padres[v] = make_pair(u, peso);
@@ -785,7 +789,7 @@ unordered_map<int, Graph<T1>* > Graph<T1>::BellmanFord(int inicio) {
             cout << "El grafo contiene un ciclo de pesos negativos" << endl;
     }
 
-    unordered_map<N, Graph<T1>*> res;
+    unordered_map<int, Grafo<T1>*> res;
     for(auto n : this->nodos)
         res[n->data->id] = construirGrafo(inicio, n->data->id, padres);
     return res;
@@ -793,7 +797,7 @@ unordered_map<int, Graph<T1>* > Graph<T1>::BellmanFord(int inicio) {
 template<typename T1>
 pair<map<Nodo<T1>*,map<Nodo<T1>*,float> >,map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> > > Grafo<T1>::FloydWarshall() {
   map<Nodo<T1>*,map<Nodo<T1>*,float> > dist;
-  map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*> interm;
+  map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*>> interm;
   float inf = numeric_limits<float>::max();
 
   for(auto n1 : this->nodos) {

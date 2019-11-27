@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 template <typename T1>
 class Nodo {
 public:
