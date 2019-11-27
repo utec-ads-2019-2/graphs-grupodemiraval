@@ -35,12 +35,14 @@ public:
     Nodo<T1>* Buscar_Nodo(int search_id, int &pos);
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final);
     Arista<T1>* Buscar_Arista(int id_inicio, int id_final, int &pos);
+    bool isInVectorIndice(vector<int> vectorcito, int pos);
     virtual void Remover_Arista(int id_inicio, int id_final) = 0;
     void Remover_Nodo(int remove_id);
     bool Es_Bipartito();
     virtual double Densidad(double cota) = 0;
 	bool Es_Conexo();
     void DFS(Nodo<T1>*& v, unordered_set<int>& visited);
+    void Dijktra(int nodoBusqueda);
     void Generar_Aristas_Invertidas();
     Grafo<T1>* Invertir_Aristas();
     bool Es_Fuertemente_Conexo();
@@ -372,6 +374,81 @@ void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<int>& visited) {
             DFS(v, visited);
         }
     }
+}
+
+template<typename T1>
+void Grafo<T1>::Dijktra(int search_id) {
+	auto nodito = Buscar_Nodo(search_id);
+
+	vector<int> posYaVisitados;
+	float menor = 10000000;
+
+	float MatrizSoluciones[9][2];
+
+	for (int i = 0; i < 9; i++) {
+		MatrizSoluciones[i][0] = menor;
+	}
+	int posicion, indice;
+	for (int i = 0; i < 9; i++) {
+		for (int k = 0; k < 9; k++) {
+			if (i < 1) {
+				if (nodos[k]->data->id == nodito->data->id) {
+					MatrizSoluciones[k][0] = 0;
+					Buscar_Nodo(nodito->data->id, posicion);
+					MatrizSoluciones[k][1] = posicion;
+				}
+				else {
+					auto arista = nodito->isAdyacent(nodos[k]);
+					if (arista != nullptr) {
+						MatrizSoluciones[k][0] = arista->peso;
+						Buscar_Nodo(nodito->data->id, posicion);
+						MatrizSoluciones[k][1] = posicion;
+					}
+				}
+			}
+			else {
+				if (!isInVectorIndice(posYaVisitados, k)) {
+					auto arista = nodito->isAdyacent(nodos[k]);
+					Buscar_Nodo(nodito->data->id, posicion);
+					if (arista != nullptr && MatrizSoluciones[k][0]) {						
+						if ((arista->peso + MatrizSoluciones[posicion][0]) < MatrizSoluciones[k][0]) {
+							MatrizSoluciones[k][0] = arista->peso + MatrizSoluciones[posicion][0];
+							MatrizSoluciones[k][1] = float(posicion);
+						}
+					}
+				}
+			}
+		}
+		for (int q = 0; q < 9; q++) {
+			if (MatrizSoluciones[q][0]!=0 && !isInVectorIndice(posYaVisitados, q) && q != posicion)
+				if (MatrizSoluciones[q][0] < menor) {
+					menor = MatrizSoluciones[q][0];
+					indice = q;
+				}
+		}
+		posYaVisitados.push_back(posicion);
+		nodito = nodos[indice];
+		Buscar_Nodo(nodito->data->id, posicion);
+		menor = 100000000;
+	}
+
+	//IMPRIMIR LA MATRIZ
+	for (int i = 0; i < 9; i++) {
+		for (int k = 0; k < 2; k++) {
+			std::cout << MatrizSoluciones[i][k] << " ";
+		}
+		cout << endl;
+	}
+}
+
+template<typename T1>
+bool Grafo<T1>::isInVectorIndice(vector<int> vectorcito, int pos) {
+	if(vectorcito.size() > 0)
+	for (auto c : vectorcito) {
+		if (c == pos)
+			return true;
+	}
+	return false;
 }
 
 template<typename T1>
