@@ -41,6 +41,7 @@ public:
     bool Es_Fuertemente_Conexo();
     int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
+  unordered_map<int, Graph<T1>* > BellmanFord(int inicio);
 };
 
 
@@ -527,6 +528,72 @@ Arista<T1>* Grafo<T1>::menor_Arista(vector<Nodo<T1>*>* vectorcito)
 	return menor_arista;
 }
 
+template<typename T1>
+void Grafo_dirigido<T1>::Insertar_Arista(int inicio, int fin, float peso) {
+  auto it = this->Buscar_Nodo(inicio);
+	auto destino = this->Buscar_Nodo(dest);
+	auto aux = new Arista<T1>(it, destino);
+	it->aristas.push_back(aux);
+}
+
+template<typename T1>
+Graph<T1>* Graph<T1>::construirGrafo(int inicio, int fin, unordered_map<int, pair<int, float> > padres) {
+  if(parents.find(fin) == parents.end()) return nullptr;
+  Graph<T1>* res = new Grafo_dirigido<T1>();
+  res->Insertar_Nodo(Buscar_Nodo(fin)->getData());
+  do {
+    res->Insertar_Nodo(Buscar_Nodo(padres[fin].first));
+    res->Insertar_Arista(padres[fin].first, fin, padres[fin].second);
+    fin = padres[fin].first;
+  } while(padres[fin]->first != end);
+  return res;
+}
+
+template<typename T1>
+unordered_map<int, Graph<T1>* > Graph<T1>::BellmanFord(int inicio) {
+    unordered_map<int, float> dist;
+    unordered_map<Node<T1>*, int> nodos_invertidos;
+    float inf = numeric_limits<float>::max();
+    vector<Arista<T1>*> aristas;
+    unordered_map<int, pair<int, float> > padres;
+    padres[inicio] = make_pair(inicio, 0);
+
+    for(auto n : this->nodos) {
+        dist[n->data->id] = inf;
+        nodos_invertidos[n] = n->data->id;
+        vector<Arista<T1>*> aristasDelNodo = n->getEdges();
+        for(Arista<T1>* ar : aristasDelNodo)
+            aristas.push_back(ar);
+    }
+    dist[inicio] = 0;
+
+    int V = this->nodos.size();
+
+    for(int i = 0; i < V-1; ++i) {
+        for(Arista<T1>* ar : aristas) {
+            int u = nodos_invertidos[ar->nodos[0]];
+            int v = nodos_invertidos[ar->nodos[1]];
+            float weight = ar->getWeight();
+            if(dist[u] != inf && dist[u] + peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                padres[v] = make_pair(u, peso);
+            }
+        }
+    }
+
+    for(Arista<T1>* ar: aristas) {
+        int u = nodos_invertidos[ar->nodos[0]];
+        int v = nodos_invertidos[ar->nodos[1]];
+        float peso = ar->getWeight();
+        if(dist[u] != inf && dist[u] + peso < dist[v])
+            cout << "El grafo contiene un ciclo de pesos negativos" << endl;
+    }
+
+    unordered_map<N, Graph<T1>*> res;
+    for(auto n : this->nodos)
+        res[n->data->id] = construirGrafo(inicio, n->data->id, padres);
+    return res;
+}
 
 class Aeropuerto {
 public:
