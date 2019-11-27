@@ -43,7 +43,7 @@ public:
 	Grafo<T1>* Invertir_Aristas();
 
 	bool Es_Fuertemente_Conexo();
-	void Dijktra(int nodoBusqueda);
+	vector<Arista<T1>*> Dijktra(int nodoBusqueda);
 	int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
 };
@@ -377,32 +377,36 @@ void Grafo<T1>::DFS(Nodo<T1>*& v, unordered_set<int>& visited) {
 }
 
 template<typename T1>
-void Grafo<T1>::Dijktra(int search_id) {
+vector<Arista<T1>*> Grafo<T1>::Dijktra(int search_id) {
 	auto nodito = Buscar_Nodo(search_id);
 
 	vector<int> posYaVisitados;
 	float menor = 10000000;
 
-	float MatrizSoluciones[9][2];
 
-	for (int i = 0; i < 9; i++) {
-		MatrizSoluciones[i][0] = menor;
+	vector<float> MatrizSoluciones;
+	vector<int> MatrizSolucionesDos;
+
+	for (int i = 0; i < nodos.size(); i++) {
+		MatrizSoluciones.push_back(menor);
+		MatrizSolucionesDos.push_back(-1);
 	}
+
 	int posicion, indice;
-	for (int i = 0; i < 9; i++) {
-		for (int k = 0; k < 9; k++) {
+	for (int i = 0; i < nodos.size(); i++) {
+		for (int k = 0; k < nodos.size(); k++) {
 			if (i < 1) {
 				if (nodos[k]->data->id == nodito->data->id) {
-					MatrizSoluciones[k][0] = 0;
+					MatrizSoluciones[k] = 0;
 					Buscar_Nodo(nodito->data->id, posicion);
-					MatrizSoluciones[k][1] = posicion;
+					MatrizSolucionesDos[k] = posicion;
 				}
 				else {
 					auto arista = nodito->isAdyacent(nodos[k]);
 					if (arista != nullptr) {
-						MatrizSoluciones[k][0] = arista->peso;
+						MatrizSoluciones[k] = arista->peso;
 						Buscar_Nodo(nodito->data->id, posicion);
-						MatrizSoluciones[k][1] = posicion;
+						MatrizSolucionesDos[k] = posicion;
 					}
 				}
 			}
@@ -410,19 +414,19 @@ void Grafo<T1>::Dijktra(int search_id) {
 				if (!isInVectorIndice(posYaVisitados, k)) {
 					auto arista = nodito->isAdyacent(nodos[k]);
 					Buscar_Nodo(nodito->data->id, posicion);
-					if (arista != nullptr && MatrizSoluciones[k][0]) {						
-						if ((arista->peso + MatrizSoluciones[posicion][0]) < MatrizSoluciones[k][0]) {
-							MatrizSoluciones[k][0] = arista->peso + MatrizSoluciones[posicion][0];
-							MatrizSoluciones[k][1] = float(posicion);
+					if (arista != nullptr) {
+						if ((arista->peso + MatrizSoluciones[posicion]) < MatrizSoluciones[k]) {
+							MatrizSoluciones[k] = arista->peso + MatrizSoluciones[posicion];
+							MatrizSolucionesDos[k] = float(posicion);
 						}
 					}
 				}
 			}
 		}
-		for (int q = 0; q < 9; q++) {
-			if (MatrizSoluciones[q][0]!=0 && !isInVectorIndice(posYaVisitados, q) && q != posicion)
-				if (MatrizSoluciones[q][0] < menor) {
-					menor = MatrizSoluciones[q][0];
+		for (int q = 0; q < nodos.size(); q++) {
+			if (MatrizSoluciones[q] != 0 && !isInVectorIndice(posYaVisitados, q) && q != posicion)
+				if (MatrizSoluciones[q] < menor) {
+					menor = MatrizSoluciones[q];
 					indice = q;
 				}
 		}
@@ -431,16 +435,18 @@ void Grafo<T1>::Dijktra(int search_id) {
 		Buscar_Nodo(nodito->data->id, posicion);
 		menor = 100000000;
 	}
-
-	//IMPRIMIR LA MATRIZ
-	for (int i = 0; i < 9; i++) {
-		for (int k = 0; k < 2; k++) {
-			std::cout << MatrizSoluciones[i][k] << " ";
-		}
-		cout << endl;
+	for (int i = 0; i < nodos.size(); i++) {
+		cout << MatrizSoluciones[i] << "    " << MatrizSolucionesDos[i] << endl;
 	}
-}
+	vector<Arista<T1>*> aristas;
+	for (int i = 0; i < nodos.size(); i++) {
+		Arista<T1>* aristita = new Arista<T1>(nodos[i], nodos[MatrizSolucionesDos[i]]);
+		aristas.push_back(aristita);
+		delete aristita;
+	}
 
+	return aristas;
+}
 template<typename T1>
 bool Grafo<T1>::isInVectorIndice(vector<int> vectorcito, int pos) {
 	if(vectorcito.size() > 0)
