@@ -47,6 +47,7 @@ int main()
 
 	graph->Busqueda_A(7188,4025);
 	graph->BellmanFord(1285);
+	graph->Dijktra(7252);
 
 /*	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 
