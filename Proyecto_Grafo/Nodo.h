@@ -21,7 +21,7 @@ public:
 		std::cout << "Aristas del nodo: " << this->data->id << "\n";
 		for (auto it : this->aristas)
 		{
-			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << "\n";
+			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << " / Peso: "<<it->peso<< "\n";
 		}
 	}
 

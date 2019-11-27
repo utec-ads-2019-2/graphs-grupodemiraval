@@ -6,9 +6,13 @@
 #include <queue>
 #include <unordered_set>
 #include "Nodo.h"
+#include <math.h>
 #include <algorithm>
 
 using namespace std;
+
+map<int,vector<double>> valores;
+
 template<typename T1>
 class Grafo {
 public:
@@ -39,6 +43,7 @@ public:
     void Generar_Aristas_Invertidas();
     Grafo<T1>* Invertir_Aristas();
     bool Es_Fuertemente_Conexo();
+    void Busqueda_A(int id_inicio, int id_final);
     int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
 };
@@ -403,6 +408,77 @@ bool is_in_vector(vector<Nodo<T1>*>* vectorcito, Nodo<T1>* nodito) {
 		}
 	}
 	return false;
+}
+
+template<typename T1>
+bool menor2(Nodo<T1>* a, Nodo<T1>* b)
+{
+  return (valores[a->data->id][1]<=valores[b->data->id][1]);
+}
+
+template<typename T1>
+double distancia(Nodo<T1>* inicio, Nodo<T1>* final)
+{
+  return sqrt(pow(final->posx-inicio->posx,2)+pow(final->posy-inicio->posy,2));
+}
+
+//[0] = visitado, [1]=fGlobal, [2]=fLocal, [3]=parent;
+
+template<typename T1>
+void Grafo<T1>::Busqueda_A(int id_inicio, int id_final)
+{
+  for(auto it: this->nodos)
+  {
+    vector<double> aux;
+    aux.push_back(0);
+    aux.push_back(1000000);
+    aux.push_back(1000000);
+    aux.push_back(0);
+    valores[it->data->id]=aux;
+  }
+  auto inicio = Buscar_Nodo(id_inicio);
+  auto final = Buscar_Nodo(id_final);
+  valores[inicio->data->id][2]=0;
+  valores[inicio->data->id][1]=distancia(inicio,final);
+
+  vector<Nodo<T1>*> unchecked_nodes;
+  unchecked_nodes.push_back(inicio);
+  while(!unchecked_nodes.empty())
+  {
+    sort(unchecked_nodes.begin(),unchecked_nodes.end(),menor2<T1>);
+     while(!unchecked_nodes.empty() & valores[unchecked_nodes.front()->data->id][0]==1)
+       unchecked_nodes.erase(unchecked_nodes.begin());
+    if(unchecked_nodes.empty())
+      break;
+    auto actual = unchecked_nodes.front();
+    for(auto aris : actual->aristas)
+    {
+      if(valores[actual->data->id][2] + aris->peso < valores[aris->nodos[1]->data->id][2])
+      {
+        valores[aris->nodos[1]->data->id][2] = valores[actual->data->id][2] + aris->peso;
+        valores[aris->nodos[1]->data->id][3] = actual->data->id;
+        valores[aris->nodos[1]->data->id][1] = valores[aris->nodos[1]->data->id][2] + distancia(aris->nodos[1],final);
+        if(valores[aris->nodos[1]->data->id][0]==0)
+          unchecked_nodes.push_back(aris->nodos[1]);
+      }
+    }
+    valores[actual->data->id][0] = 1;
+  }
+  double peso_final = valores[final->data->id][1];
+  vector<int> recorrido;
+  while(valores[final->data->id][3]!=0)
+  {
+    recorrido.push_back(final->data->id);
+    final = Buscar_Nodo(valores[final->data->id][3]);
+  }
+  cout<<"El recorrido seguido fue: ";
+  cout<<id_inicio<<" ";
+  for(int i = recorrido.size()-1; i >= 0; i--)
+  {
+    cout<<recorrido[i]<<" ";
+  }
+  cout<<endl;
+  cout<<"Con un peso final de: "<<peso_final<<endl;
 }
 
 template<typename T1>

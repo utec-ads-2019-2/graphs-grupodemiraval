@@ -11,11 +11,11 @@ int main()
 	Json::Value aeropuertos;
 	ifstream aeropuertos_file("airports.json", ios::in);
 	aeropuertos_file >> aeropuertos;
-	Grafo<Aeropuerto*> *graph;
+	Grafo<Aeropuerto*>* graph = new Grafo_dirigido<Aeropuerto*>;
 	vector<int> destinos;
 	string es;
 
-	cout << "El grafo es dirigido (D) o no dirigido (ND)?" << endl;
+/*	cout << "El grafo es dirigido (D) o no dirigido (ND)?" << endl;
 
 		cin >> es;
 		if (es == "D") {
@@ -24,7 +24,7 @@ int main()
 		else if (es == "ND") {
 			graph = new Grafo_no_dirigido<Aeropuerto*>;
 		}
-
+*/
 
 
 	for (int i = 0; i < aeropuertos.size(); i++) {
@@ -45,7 +45,9 @@ int main()
 
 	cout <<"El grafo tiene: "<<graph->nodos.size()<<" nodos"<<endl;
 
-	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
+	graph->Busqueda_A(7188,4025);
+
+/*	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 
 	cout << (graph->Es_Conexo() ? "es conexo" : "no es conexo") << endl;
 
@@ -56,34 +58,7 @@ int main()
 
 	graph->Ejecutar();
 
-	// if (es == "ND") {
-	// 	cout << "Ejecutando el MST : PRIM : " << endl;
-	//
-	// 	auto min_prim = graph->Prim();
-	// 	int counter = 1;
-	// 	cout << "\n\n\n";
-	//
-	// 	for (auto it : min_prim) {
-	// 		cout << "Arista " << counter << ":" << endl;
-	// 		cout << "Nombre de salida:" << it->nodos[0]->data->id << "  " << "Nombre de entrada: " << it->nodos[1]->data->id << endl;
-	// 		cout << "Id de salida:" << it->nodos[0]->data->id << "  " << "Id de entrada: " << it->nodos[1]->data->id << endl;
-	// 		cout << "\n\n";
-	// 		counter++;
-	// 	}
-	// 	cout << "Ejecutando el MST : KRUSKAL : " << endl;
-	//
-	// 	auto a = graph->MST_Kruskal();
-	// 	for (auto i : a.nodos)
-	// 	{
-	// 		i->Imprimir_Aristas();
-	// 	}
-	//
-	//
-	// }
-
-
-
-
+*/
 
 
 
