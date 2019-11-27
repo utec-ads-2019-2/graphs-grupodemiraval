@@ -38,6 +38,14 @@ public:
 			return false;
 		}
 	}
+
+	T1 getData() {
+		return data;
+	}
+
+	vector<Arista<T1>*> getEdges() {
+		return aristas;
+	}
 };
 
 
