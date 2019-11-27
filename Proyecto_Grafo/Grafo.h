@@ -257,6 +257,32 @@ Arista<T1>* Grafo<T1>::Buscar_Arista(int id_inicio, int id_final)
     return nullptr;
 }
 
+
+template<typename T1>
+Grafo<T1>* aristasAGrafos(vector<Arista<T1>*>* vectorcito) {
+	Grafo<T1>* MST_graph = new Grafo_no_dirigido<T1>();
+	for (auto cc : *vectorcito)
+	{
+		cc->nodos[0]->aristas.clear();
+		cc->nodos[1]->aristas.clear();
+	}
+	for (auto it : *vectorcito)
+	{
+		if (MST_graph->Buscar_Nodo(it->nodos[0]->data->id) == nullptr)
+		{
+			MST_graph->nodos.push_back(it->nodos[0]);
+		}
+		if (MST_graph->Buscar_Nodo(it->nodos[1]->data->id) == nullptr)
+		{
+			MST_graph->nodos.push_back(it->nodos[1]);
+		}
+		it->nodos[0]->aristas.push_back(it);
+		it->nodos[1]->aristas.push_back(it);
+	}
+
+	return MST_graph;
+}
+
 template <typename T1>
 Arista<T1>* Grafo<T1>::Buscar_Arista(int id_inicio, int id_final, int &pos)
 {
