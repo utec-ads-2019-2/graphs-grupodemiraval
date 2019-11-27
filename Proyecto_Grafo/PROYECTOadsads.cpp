@@ -46,6 +46,7 @@ int main()
 	cout <<"El grafo tiene: "<<graph->nodos.size()<<" nodos"<<endl;
 
 	graph->Busqueda_A(7188,4025);
+	graph->BellmanFord(1285);
 
 /*	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 

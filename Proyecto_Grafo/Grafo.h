@@ -44,6 +44,7 @@ public:
     Grafo<T1>* Invertir_Aristas();
     bool Es_Fuertemente_Conexo();
     void Busqueda_A(int id_inicio, int id_final);
+    void BellmanFord(int id);
     int Get_aristas();
 	Arista<T1>* menor_Arista(vector<Nodo<T1>*>* vectorcito);
 };
@@ -479,7 +480,47 @@ void Grafo<T1>::Busqueda_A(int id_inicio, int id_final)
   }
   cout<<endl;
   cout<<"Con un peso final de: "<<peso_final<<endl;
+  valores.clear();
 }
+
+template<typename T1>
+void Grafo<T1>::BellmanFord(int id)
+{
+  vector<Arista<T1>*> aristas;
+  map<Nodo<T1>*,double> values;
+  bool cambiado = true;
+  for (auto node : this->nodos)
+  {
+    values[node] = 10000000;
+    for (auto ar : node->aristas)
+    {
+      aristas.push_back(ar);
+    }
+  }
+  values[Buscar_Nodo(id)]=0;
+  int i = 0;
+  while(cambiado)
+  {
+    cambiado = false;
+    for(auto aris : aristas)
+    {
+      if(values[aris->nodos[0]] + aris->peso < values[aris->nodos[1]])
+      {
+        values[aris->nodos[1]] = values[aris->nodos[0]] + aris->peso;
+        cambiado = true;
+      }
+    }
+    i++;
+    if(i >= this->nodos.size())
+      throw runtime_error("No se puede hacer el Bellman-Ford porque existe un ciclo negativo");
+  }
+  cout<<"El peso minimo para llegar a cada uno de los nodos es: "<<endl;
+  for(auto n : this->nodos)
+  {
+    cout<<n->data->id<<" - "<<values[n]<<endl;
+  }
+}
+
 
 template<typename T1>
 Grafo<T1>* Grafo_no_dirigido<T1>::Prim()
