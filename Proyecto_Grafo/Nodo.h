@@ -24,6 +24,14 @@ public:
 			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << " / Peso: "<<it->peso<< "\n";
 		}
 	}
+	Arista<T1>* isAdyacent(Nodo<T1>* nodo) {
+		for (auto c : aristas) {
+			if (c->nodos[0]->data->id == nodo->data->id || c->nodos[1]->data->id == nodo->data->id) {
+				return c;
+			}
+		}
+		return nullptr;
+	};
 
 	bool seRepite(Arista<T1>* arista) {
 		if (!aristas.empty()) {
