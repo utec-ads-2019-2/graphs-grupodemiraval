@@ -52,6 +52,13 @@ int main()
 		cout << "cammmmmino a  " << i.first << endl;
 		i.second->Imprimir_Grafo();
 	}
+	auto y = graph->FloydWarshall();
+	for(auto a : y.first) {
+		cout << "Nodooooooooooo: "<< a.first->data->id << endl;
+		for(auto b : a.second) {
+			cout <<  "dest: " << b.first->data->id				 << " peso " << b.second << endl;
+		}
+	}
 
 /*	cout << (graph->Es_Bipartito() ? "es bipartito" : "no es bipartito") << endl;
 

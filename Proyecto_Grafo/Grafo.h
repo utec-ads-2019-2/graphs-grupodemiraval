@@ -818,7 +818,7 @@ pair<map<Nodo<T1>*,map<Nodo<T1>*,float> >,map<Nodo<T1>*,map<Nodo<T1>*,Nodo<T1>*>
   for(auto k : this->nodos) {
     for(auto i : this->nodos) {
       for(auto j : this->nodos) {
-        if(dist[i][k] < inf && dist[i][j] < inf && dist[i][k] + dist[k][j] < dist[i][j]) {
+        if(dist[i][k] < inf && dist[k][j] < inf && dist[i][k] + dist[k][j] < dist[i][j]) {
           dist[i][j] = dist[i][k] + dist[k][j];
           interm[i][j] = k;
         }
