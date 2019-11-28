@@ -1,0 +1,96 @@
+[
+  {
+    "City": "Postville",
+    "Name": "Postville Airport",
+    "Country": "Canada",
+    "Longitude": "-59.785278",
+    "Latitude": "54.910278",
+    "Id": "7252",
+    "destinations": [
+      "6972","4025","1579"
+    ]
+  },
+  {
+    "City": "Osubi",
+    "Name": "Warri Airport",
+    "Country": "Nigeria",
+    "Longitude": "5.45",
+    "Latitude": "5.31",
+    "Id": "6972",
+    "destinations": ["4026","4025"
+    ]
+  },
+  {
+    "City": "Rockland",
+    "Name": "Knox County Regional Airport",
+    "Country": "United States",
+    "Longitude": "-69.0992303",
+    "Latitude": "44.0601111",
+    "Id": "4026",
+    "destinations": ["4027","1579"
+    ]
+  },
+  {
+    "City": "Jacksn Hole",
+    "Name": "Jackson Hole Airport",
+    "Country": "United States",
+    "Longitude": "-110.73775",
+    "Latitude": "43.607333333",
+    "Id": "4027",
+    "destinations": [
+      "7252","4020","7188"
+    ]
+  },
+  {
+    "City": "Bar Harbor",
+    "Name": "Hancock County - Bar Harbor",
+    "Country": "United States",
+    "Longitude": "-68.3615653",
+    "Latitude": "44.4497689",
+    "Id": "4025",
+    "destinations": ["4027","4020"
+    ]
+  },
+  {
+    "City": "Bozeman",
+    "Name": "Gallatin Field",
+    "Country": "United States",
+    "Longitude": "-111.160151",
+    "Latitude": "45.777643",
+    "Id": "4020",
+    "destinations": ["4027",
+      "4025" ,"1285"
+    ]
+  },
+  {
+    "City": "Castres",
+    "Name": "Mazamet",
+    "Country": "France",
+    "Longitude": "2.289183",
+    "Latitude": "43.55625",
+    "Id": "1285",
+    "destinations": ["4026","4020","7188"
+    ]
+  },
+  {
+    "City": "White Mountain",
+    "Name": "White Mountain Airport",
+    "Country": "United States",
+    "Longitude": "-163.412778",
+    "Latitude": "64.689167",
+    "Id": "7188",
+    "destinations": ["4027",
+      "1285"
+    ]
+  },
+  {
+    "City": "Karlovy Vary",
+    "Name": "Karlovy Vary",
+    "Country": "Czech Republic",
+    "Longitude": "12.914983",
+    "Latitude": "50.202978",
+    "Id": "1579",
+    "destinations": ["4026"
+    ]
+  }
+]
