@@ -1,8 +1,4 @@
 ﻿  PROYECTOadsads.cpp
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\Grafo.h(398,31): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\Grafo.h(380): message : al compilar la función del miembro clase plantilla "void Grafo<Aeropuerto *>::Dijktra(int)"
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(74): message : vea la referencia a la creación de instancias de plantilla de función "void Grafo<Aeropuerto *>::Dijktra(int)" que se está compilando
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\Grafo.h(53): message : vea la referencia a la creación de instancias de clase plantilla "Grafo<Aeropuerto *>" que se está compilando
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(37): message : vea la referencia a la creación de instancias de clase plantilla "Grafo_dirigido<Aeropuerto *>" que se está compilando
-C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\Grafo.h(405,32): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(18,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\HP\source\repos\PROYECTOadsads\PROYECTOadsads\PROYECTOadsads.cpp(19,21): warning C4018: '<': no coinciden signed/unsigned
   PROYECTOadsads.vcxproj -> C:\Users\HP\source\repos\PROYECTOadsads\Debug\PROYECTOadsads.exe

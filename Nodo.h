@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 template <typename T1>
 class Nodo {
 public:
@@ -16,6 +18,14 @@ public:
 		posy = data->Latitud;
 	}
 
+	void Imprimir_Aristas()
+	{
+		std::cout << "Aristas del nodo: " << this->data->id << "\n";
+		for (auto it : this->aristas)
+		{
+			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << " / Peso: "<<it->peso<< "\n";
+		}
+	}
 	Arista<T1>* isAdyacent(Nodo<T1>* nodo) {
 		for (auto c : aristas) {
 			if (c->nodos[0]->data->id == nodo->data->id || c->nodos[1]->data->id == nodo->data->id) {
@@ -24,15 +34,6 @@ public:
 		}
 		return nullptr;
 	};
-
-	void Imprimir_Aristas()
-	{
-		std::cout << "Aristas del nodo: " << this->data->id << "\n";
-		for (auto it : this->aristas)
-		{
-			std::cout << "Origen: " << it->nodos[0]->data->id << " / " << "Final: " << it->nodos[1]->data->id << "\n";
-		}
-	}
 
 	bool seRepite(Arista<T1>* arista) {
 		if (!aristas.empty()) {
@@ -43,7 +44,17 @@ public:
 				}
 			}
 		}
-		return false;
+		else {
+			return false;
+		}
+	}
+
+	T1 getData() {
+		return data;
+	}
+
+	vector<Arista<T1>*> getEdges() {
+		return aristas;
 	}
 };
 
